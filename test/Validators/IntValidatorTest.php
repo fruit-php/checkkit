@@ -69,4 +69,16 @@ class IntValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->runner(['min' => -1, 'max' => 1], $data, $expect, $msg);
     }
+
+    /**
+     * @dataProvider minMaxP
+     */
+    public function testMinMaxExc($data, string $expect, string $msg)
+    {
+        $this->runner([
+            'min' => -2,
+            'max' => 2,
+            'inc' => false
+        ], $data, $expect, $msg);
+    }
 }

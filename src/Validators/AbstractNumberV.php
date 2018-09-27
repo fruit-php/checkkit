@@ -9,6 +9,12 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
 
 /**
  * AbstractNumberV is shared facilities among numeric, integer and float.
+ *
+ * Supported rules:
+ *
+ * * inc: boolean. true min/max is inclusive, which is default.
+ * * min: Minimum allowed value.
+ * * max: Maximum allowed value.
  */
 abstract class AbstractNumberV implements Validator
 {
@@ -36,6 +42,10 @@ abstract class AbstractNumberV implements Validator
 
     private function checkMinMax($val, array $rule)
     {
+        $inc = true;
+        if (isset($rule['inc'])) {
+            $inc = !!$rule['inc'];
+        }
         if (isset($rule['min']) and ($t = $this->checkType($rule['min'])) !== '') {
             throw new InvalidRuleException('min must be ' . $t . ' value');
         }
@@ -51,12 +61,22 @@ abstract class AbstractNumberV implements Validator
             throw new InvalidRuleException('min must be less or equal than max');
         }
 
-        if (isset($rule['min']) and $rule['min'] > $val) {
-            return new InvalidFormatException;
+        if (isset($rule['min'])) {
+            if ($rule['min'] > $val) {
+                return new InvalidFormatException;
+            }
+            if (!$inc and $rule['min'] == $val) {
+                return new InvalidFormatException;
+            }
         }
 
-        if (isset($rule['max']) and $rule['max'] < $val) {
-            return new InvalidFormatException;
+        if (isset($rule['max'])) {
+            if ($rule['max'] < $val) {
+                return new InvalidFormatException;
+            }
+            if (!$inc and $rule['max'] == $val) {
+                return new InvalidFormatException;
+            }
         }
 
         return null;

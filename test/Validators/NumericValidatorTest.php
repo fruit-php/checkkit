@@ -64,9 +64,9 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
     public function minMaxP()
     {
         return $this->typingData([
-            [1, self::OK, 'in range'],
+            [1.5, self::OK, 'in range'],
             [0, self::OK, 'in range'],
-            [-1, self::OK, 'in range'],
+            [-1.5, self::OK, 'in range'],
             [2/3, self::OK, 'in range'],
             [-2/3, self::OK, 'in range'],
             [2, self::ERR_FORMAT, 'over max'],
@@ -82,5 +82,32 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
     public function testMinMax($data, string $expect, string $msg)
     {
         $this->runner(['min' => -1.5, 'max' => 1.5], $data, $expect, $msg);
+    }
+
+    public function minMaxExcP()
+    {
+        return $this->typingData([
+            [0, self::OK, 'in range'],
+            [1.5, self::ERR_FORMAT, 'in range'],
+            [-1.5, self::ERR_FORMAT, 'in range'],
+            [4/3, self::OK, 'in range'],
+            [-4/3, self::OK, 'in range'],
+            [2, self::ERR_FORMAT, 'over max'],
+            [-2, self::ERR_FORMAT, 'over min'],
+            [1.50001, self::ERR_FORMAT, 'over max'],
+            [-1.50001, self::ERR_FORMAT, 'over min'],
+        ]);
+    }
+
+    /**
+     * @dataProvider minMaxExcP
+     */
+    public function testMinExcMax($data, string $expect, string $msg)
+    {
+        $this->runner([
+            'min' => -1.5,
+            'max' => 1.5,
+            'inc' => false
+        ], $data, $expect, $msg);
     }
 }

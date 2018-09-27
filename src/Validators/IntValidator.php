@@ -10,11 +10,7 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
 /**
  * IntValidator is a validator for integer data.
  *
- * Supported rules:
- *
- * * min: int. Minimum allowed value. (inclusive)
- * * max: int. Maximum allowed value. (inclusive)
- *
+ * @see AbstractNumberV
  * \code{.php}
  * (new IntValidator)->validate(1, ['min' => -1.5, 'max' => 3.3]);
  * \endcode
