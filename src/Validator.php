@@ -36,6 +36,9 @@ interface Validator
      *    (Exceptions::InvalidFormatException for example)
      * 3. Use primitive types in rule if possible.
      * 4. Add detailed documentation about non-primitive type rules.
+     * 5. Rule validating COULD be lazy. In other words, passing invalid rules to
+     *    this method MIGHT NOT trigger Exceptions::InvalidRuleException if data
+     *    failed validating before applying the rule.
      */
     public function validate($data, array $rule);
 }
