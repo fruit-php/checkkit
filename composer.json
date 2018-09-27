@@ -1,0 +1,30 @@
+{
+  "name": "fruit/checkkit",
+  "description": "Data validating tools for Fruit framework",
+  "authors": [
+    {
+      "name": "Ronmi Ren",
+      "email": "ronmi.ren@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "~6",
+    "squizlabs/php_codesniffer": "*",
+    "phploc/phploc": "*",
+    "pdepend/pdepend": "*",
+    "phpmd/phpmd": "*",
+    "sebastian/phpcpd": "*"
+  },
+  "require": {
+    "php": "^7",
+    "ext-mbstring": "*"
+  },
+  "suggest": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Fruit\\CheckKit\\": "src",
+      "FruitTest\\CheckKit\\": "test"
+    }
+  }
+}

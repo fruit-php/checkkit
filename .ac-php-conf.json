@@ -1,0 +1,13 @@
+{
+  "filter": {
+    "php-file-ext-list": [
+      "php"
+    ],
+    "php-path-list": [
+        "src",
+        "test",
+        "vendor/phpmailer/phpmailer"
+    ],
+    "php-path-list-without-subdir": []
+  }
+}
