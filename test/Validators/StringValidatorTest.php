@@ -17,6 +17,7 @@ class StringValidatorTest extends \PHPUnit\Framework\TestCase
             [1, self::ERR_TYPE, 'integer'],
             [1.2, self::ERR_TYPE, 'float'],
             [true, self::ERR_TYPE, 'boolean'],
+            [null, self::ERR_TYPE, 'null'],
         ];
     }
 

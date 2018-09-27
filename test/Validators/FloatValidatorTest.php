@@ -21,6 +21,7 @@ class FloatValidatorTest extends \PHPUnit\Framework\TestCase
             [1, self::ERR_TYPE, 'int'],
             [0, self::ERR_TYPE, 'int zero'],
             ['+1.12345e2', self::ERR_TYPE, 'numeric string represents float'],
+            [null, self::ERR_TYPE, 'null'],
         ];
     }
 

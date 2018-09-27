@@ -20,6 +20,7 @@ class IntValidatorTest extends \PHPUnit\Framework\TestCase
             ['1', self::ERR_TYPE, 'integer string'],
             [1.0, self::ERR_TYPE, 'float'],
             ['+1e2', self::ERR_TYPE, 'numeric string represents integer'],
+            [null, self::ERR_TYPE, 'null'],
         ];
     }
 

@@ -20,6 +20,7 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
             ['0xaef', self::ERR_TYPE, 'hexadecimal string'],
             ['0b11110101', self::ERR_TYPE, 'binary string'],
             ['02471', self::ERR_TYPE, 'octave string'],
+            [null, self::ERR_TYPE, 'null'],
         ];
     }
 
