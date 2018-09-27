@@ -12,7 +12,7 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
  *
  * @see AbstractNumberV
  * \code{.php}
- * (new IntValidator)->validate(1, ['min' => -1.5, 'max' => 3.3]);
+ * (new IntValidator)->validate(1, ['min' => -1, 'max' => 3]);
  * \endcode
  */
 class IntValidator extends AbstractNumberV
