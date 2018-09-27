@@ -110,4 +110,25 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
             'inc' => false
         ], $data, $expect, $msg);
     }
+
+    public function invalidRuleP()
+    {
+        return [
+            [['max' => 'str'], 'max is string'],
+            [['min' => 'str'], 'min is string'],
+            [[
+                'max' => 1,
+                'min' => 1.1
+            ], 'min > max'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidRuleP
+     * @expectedException \Fruit\CheckKit\Exceptions\InvalidRuleException
+     */
+    public function testInvalidRule($rule, string $msg)
+    {
+        (new N)->validate(1, $rule);
+    }
 }

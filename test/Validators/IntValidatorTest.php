@@ -81,4 +81,27 @@ class IntValidatorTest extends \PHPUnit\Framework\TestCase
             'inc' => false
         ], $data, $expect, $msg);
     }
+
+    public function invalidRuleP()
+    {
+        return [
+            [['max' => 'str'], 'max is string'],
+            [['min' => 'str'], 'min is string'],
+            [['max' => 1.1], 'max is float'],
+            [['min' => 1.1], 'min is float'],
+            [[
+                'max' => 1,
+                'min' => 2
+            ], 'min > max'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidRuleP
+     * @expectedException \Fruit\CheckKit\Exceptions\InvalidRuleException
+     */
+    public function testInvalidRule($rule, string $msg)
+    {
+        (new I)->validate(1, $rule);
+    }
 }
