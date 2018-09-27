@@ -19,49 +19,18 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
  * (new NumericValidator)->validate(1, ['min' => -1.5, 'max' => 3.3]);
  * \endcode
  */
-class NumericValidator implements Validator
+class NumericValidator extends AbstractNumberV
 {
     /**
-     * @see CheckKit::Validator
+     * @see AbstractNumberV::checkType
      */
-    public function validate($val, array $rule)
+    protected function checkType($val): string
     {
-        if (! is_numeric($val)) {
-            return new InvalidTypeException('numeric');
+        $ret = '';
+        if (!is_numeric($val)) {
+            $ret = 'numeric';
         }
 
-        if (isset($rule['min']) or isset($rule['max'])) {
-            return $this->checkMinMax($val, $rule);
-        }
-
-        return null;
-    }
-
-    private function checkMinMax($val, array $rule)
-    {
-        if (isset($rule['min']) and !is_numeric($rule['min'])) {
-            throw new InvalidRuleException('min must be numeric value');
-        }
-
-        if (isset($rule['max']) and !is_numeric($rule['max'])) {
-            throw new InvalidRuleException('max must be numeric value');
-        }
-
-        if (isset($rule['min']) and
-            isset($rule['max']) and
-            $rule['min'] > $rule['max']
-        ) {
-            throw new InvalidRuleException('min must be less or equal than max');
-        }
-
-        if (isset($rule['min']) and $rule['min'] > $val) {
-            return new InvalidFormatException;
-        }
-
-        if (isset($rule['max']) and $rule['max'] < $val) {
-            return new InvalidFormatException;
-        }
-
-        return null;
+        return $ret;
     }
 }
