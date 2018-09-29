@@ -176,4 +176,20 @@ class ArrayValidatorTest extends \PHPUnit\Framework\TestCase
     {
         (new A)->validate(new Repo, [1, 2, 3], $rule);
     }
+
+    public function testData()
+    {
+        $repo = new Repo;
+        $repo->register('int', 'Fruit\CheckKit\Validators\IntValidator');
+        $val = [1, 2, '3'];
+        $rule = ['data' => 'int'];
+        $actual = (new A)->validate($repo, $val, $rule);
+
+        $this->assertInstanceOf(
+            'Fruit\CheckKit\Exceptions\InvalidElementException',
+            $actual
+        );
+
+        $this->assertEquals('2', $actual->key);
+    }
 }

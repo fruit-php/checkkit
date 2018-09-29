@@ -7,6 +7,7 @@ use Fruit\CheckKit\Repo;
 use Fruit\CheckKit\Exceptions\InvalidTypeException;
 use Fruit\CheckKit\Exceptions\InvalidFormatException;
 use Fruit\CheckKit\Exceptions\InvalidRuleException;
+use Fruit\CheckKit\Exceptions\InvalidElementException;
 
 /**
  * ArrayValidator validates data is indexed array. The keys of indexed array is
@@ -17,7 +18,8 @@ use Fruit\CheckKit\Exceptions\InvalidRuleException;
  * * min_length: integer. minimum length. (inclusive)
  * * max_length: integer. maximum length. (inclusive)
  * * strict: boolean. true if enable strict typing mode, which is default
- * * data: string. validator to check against element data.
+ * * data: string. validator to check against element data. (optional)
+ * * data_rules: array. rules for data validator. (optional)
  *
  * ### Strict typing mode
  *
@@ -67,6 +69,40 @@ class ArrayValidator implements Validator
             $l = count($val);
             if ($l !== 0 and $l != $max + 1) {
                 return new InvalidTypeException('indexed array');
+            }
+        }
+
+        if (isset($rule['data'])) {
+            return $this->checkData($repo, $val, $rule);
+        }
+
+        return null;
+    }
+
+    private function checkData($repo, $val, $rule)
+    {
+        $vName = $rule['data'];
+        if (!is_string($vName)) {
+            throw new InvalidRuleException(
+                'data must be a string of pre-registered validator.'
+            );
+        }
+        $validator = $repo->get($vName);
+
+        $vRule = [];
+        if (isset($rule['data_rules'])) {
+            if (! is_array($rule['data_rules'])) {
+                throw new InvalidRuleException(
+                    'data rules must be array, or just emit.'
+                );
+            }
+            $vRule = $rule['data_rules'];
+        }
+
+        foreach ($val as $k => $v) {
+            $ret = $validator->validate($repo, $v, $vRule);
+            if ($ret !== null) {
+                return new InvalidElementException((string)$k);
             }
         }
 
