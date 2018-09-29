@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit\Validators;
 
 use Fruit\CheckKit\Validators\FloatValidator as I;
+use Fruit\CheckKit\Repo;
 
 class FloatValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +29,7 @@ class FloatValidatorTest extends \PHPUnit\Framework\TestCase
     private function runner(array $rule, $data, string $expect, string $msg)
     {
         $n = new I;
-        $actual = $n->validate($data, $rule);
+        $actual = $n->validate(new Repo, $data, $rule);
         if ($expect === self::OK) {
             $this->assertNull($actual, $msg);
         } else {
@@ -104,6 +105,6 @@ class FloatValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidRule($rule, string $msg)
     {
-        (new I)->validate(1.0, $rule);
+        (new I)->validate(new Repo, 1.0, $rule);
     }
 }

@@ -3,6 +3,7 @@
 namespace Fruit\CheckKit\Validators;
 
 use Fruit\CheckKit\Validator;
+use Fruit\CheckKit\Repo;
 use Fruit\CheckKit\Exceptions\InvalidTypeException;
 
 /**
@@ -15,7 +16,7 @@ class BoolValidator implements Validator
     /**
      * @see CheckKit::Validator
      */
-    public function validate($val, array $rule)
+    public function validate(Repo $repo, $val, array $rule)
     {
         if (!is_bool($val)) {
             return new InvalidTypeException('bool');

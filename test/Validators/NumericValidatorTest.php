@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit\Validators;
 
 use Fruit\CheckKit\Validators\NumericValidator as N;
+use Fruit\CheckKit\Repo;
 
 class NumericValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,7 +28,7 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
     private function runner(array $rule, $data, string $expect, string $msg)
     {
         $n = new N;
-        $actual = $n->validate($data, $rule);
+        $actual = $n->validate(new Repo, $data, $rule);
         if ($expect === self::OK) {
             $this->assertNull($actual, $msg);
         } else {
@@ -130,6 +131,6 @@ class NumericValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidRule($rule, string $msg)
     {
-        (new N)->validate(1, $rule);
+        (new N)->validate(new Repo, 1, $rule);
     }
 }

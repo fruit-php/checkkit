@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit\Validators;
 
 use Fruit\CheckKit\Validators\StringValidator as S;
+use Fruit\CheckKit\Repo;
 
 class StringValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +25,7 @@ class StringValidatorTest extends \PHPUnit\Framework\TestCase
     private function runner(array $rule, $data, string $expect, string $msg)
     {
         $s = new S;
-        $actual = $s->validate($data, $rule);
+        $actual = $s->validate(new Repo, $data, $rule);
         if ($expect === self::OK) {
             $this->assertNull($actual, $msg);
         } else {
@@ -203,11 +204,11 @@ class StringValidatorTest extends \PHPUnit\Framework\TestCase
 
         // test against typing error
         foreach ($this->typingData([]) as $data) {
-            $actual = $s->validate($data[0], $rule);
+            $actual = $s->validate(new Repo, $data[0], $rule);
             $this->assertInstanceOf(self::ERR_TYPE, $actual, $data[2]);
         }
 
-        $actual = $s->validate('123tRue中文', $rule);
+        $actual = $s->validate(new Repo, '123tRue中文', $rule);
         if ($expect === self::OK) {
             $this->assertNull($actual, $msg);
         } else {
@@ -243,6 +244,6 @@ class StringValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidRule($rule, string $msg)
     {
-        (new S)->validate('', $rule);
+        (new S)->validate(new Repo, '', $rule);
     }
 }

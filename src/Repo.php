@@ -12,7 +12,8 @@ use ReflectionClass;
  */
 class Repo
 {
-    private $cache = [];
+    private $cls2obj = [];
+    private $alias2cls = [];
 
     /**
      * Let Repo know about an validator.
@@ -31,35 +32,24 @@ class Repo
      * @param $alias string
      * @param $validator string|Validator|callable
      */
-    public function register(string $alias, $validator)
+    public function register(string $alias, string $className)
     {
-        if (isset($this->cache[$alias])) {
+        if (isset($this->alias2cls[$alias])) {
             throw new RepoException($alias . ' is already registered');
         }
 
-        if ($validator instanceof Validator) {
-            $this->cache[$alias] = $validator;
-            return;
-        }
-
-        if (is_callable($validator)) {
-            $this->cache[$alias] = $validator;
-            return;
-        }
-
-        if (is_string($validator) and class_exists($validator)) {
-            $ref = new ReflectionClass($validator);
-            if ($ref->isSubClassOf('Fruit\CheckKit\Validator')) {
-                $this->cache[$alias] = $validator;
-                return;
+        if (!isset($this->cls2obj[$className]) and class_exists($className)) {
+            $ref = new ReflectionClass($className);
+            if (! $ref->isSubClassOf('Fruit\CheckKit\Validator')) {
+                throw new RepoException(
+                    $className . ' is not a Validator.'
+                );
             }
+            $this->cls2obj[$className] = $className;
         }
 
-        throw new RepoException(
-            $alias . ' is not registered. '
-            . 'Need Validator instance, callable which generates Validator or full class name '
-            . 'of Validator'
-        );
+        $this->alias2cls[$alias] = $className;
+        return;
     }
 
     /**
@@ -74,23 +64,19 @@ class Repo
      */
     public function get(string $alias): Validator
     {
-        if (!isset($this->cache[$alias])) {
+        if (!isset($this->alias2cls[$alias])) {
             throw new RepoException($alias . ' is yet registered');
         }
 
-        $x = $this->cache[$alias];
-        // type checking
+        $c = $this->alias2cls[$alias];
+        $x = $this->cls2obj[$c];
+
         if ($x instanceof Validator) {
             return $x;
         }
 
-        if (is_callable($x)) {
-            $this->cache[$alias] = $x();
-        } else {
-            $this->cache[$alias] = new $x;
-        }
-
-        return $this->cache[$alias];
+        $this->cls2obj[$c] = new $x;
+        return $this->cls2obj[$c];
     }
 
     /**
@@ -100,6 +86,6 @@ class Repo
      */
     public function check($val, string $alias, array $rules)
     {
-        return $this->get($alias)->validate($val, $rules);
+        return $this->get($alias)->validate($this, $val, $rules);
     }
 }

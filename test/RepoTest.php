@@ -14,27 +14,12 @@ class RepoTest extends \PHPUnit\Framework\TestCase
             'Fruit\CheckKit\Validators\StringValidator',
             $r->get('a')
         );
-
-        $r->register('b', new \Fruit\CheckKit\Validators\StringValidator);
-        $this->assertInstanceOf(
-            'Fruit\CheckKit\Validators\StringValidator',
-            $r->get('b')
-        );
-
-        $r->register('c', function () {
-            return new \Fruit\CheckKit\Validators\StringValidator;
-        });
-        $this->assertInstanceOf(
-            'Fruit\CheckKit\Validators\StringValidator',
-            $r->get('c')
-        );
     }
 
     public function invalidRegisterP()
     {
         return [
             ['a', 'Fruit\CheckKit\Validators\StringValidator'],
-            ['d', new \DateTime],
             ['d', '\DateTime'],
         ];
     }

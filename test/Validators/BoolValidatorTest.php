@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit\Validators;
 
 use Fruit\CheckKit\Validators\BoolValidator as B;
+use Fruit\CheckKit\Repo;
 
 class BoolValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +27,7 @@ class BoolValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefaultRule($data, bool $expect, string $msg)
     {
-        $actual = (new B)->validate($data, []);
+        $actual = (new B)->validate(new Repo, $data, []);
         if ($expect) {
             $this->assertNull($actual, $msg);
         } else {

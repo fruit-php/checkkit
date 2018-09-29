@@ -3,6 +3,7 @@
 namespace Fruit\CheckKit\Validators;
 
 use Fruit\CheckKit\Validator;
+use Fruit\CheckKit\Repo;
 use Fruit\CheckKit\Exceptions\InvalidTypeException;
 use Fruit\CheckKit\Exceptions\InvalidFormatException;
 use Fruit\CheckKit\Exceptions\InvalidRuleException;
@@ -31,7 +32,7 @@ class ArrayValidator implements Validator
     /**
      * @see CheckKit::Validator
      */
-    public function validate($val, array $rule)
+    public function validate(Repo $repo, $val, array $rule)
     {
         if (!is_array($val)) {
             return new InvalidTypeException('indexed array');

@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit\Validators;
 
 use Fruit\CheckKit\Validators\ArrayValidator as A;
+use Fruit\CheckKit\Repo;
 
 class ArrayValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +27,7 @@ class ArrayValidatorTest extends \PHPUnit\Framework\TestCase
 
     private function runner(array $rule, $data, string $expect, string $msg)
     {
-        $actual = (new A)->validate($data, $rule);
+        $actual = (new A)->validate(new Repo, $data, $rule);
         if ($expect === self::OK) {
             $this->assertNull($actual, $msg);
         } else {
@@ -173,6 +174,6 @@ class ArrayValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidRule($rule, string $msg)
     {
-        (new A)->validate([1, 2, 3], $rule);
+        (new A)->validate(new Repo, [1, 2, 3], $rule);
     }
 }

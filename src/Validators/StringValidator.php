@@ -4,6 +4,7 @@ namespace Fruit\CheckKit\Validators;
 
 use Exception;
 use Fruit\CheckKit\Validator;
+use Fruit\CheckKit\Repo;
 use Fruit\CheckKit\Exceptions\InvalidTypeException;
 use Fruit\CheckKit\Exceptions\InvalidRuleException;
 use Fruit\CheckKit\Exceptions\InvalidFormatException;
@@ -33,7 +34,7 @@ class StringValidator implements Validator
     /**
      * @see CheckKit::Validator
      */
-    public function validate($val, array $rule)
+    public function validate(Repo $repo, $val, array $rule)
     {
         if (! is_string($val)) {
             return new InvalidTypeException('string');
