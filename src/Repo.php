@@ -21,7 +21,17 @@ class Repo implements Compilable
     protected $alias2cls = [];
 
     /**
-     * Create an repo with default validators.
+     * Create an repo with default validators. This is a wrapper for Repo::setDefault.
+     *
+     * @return Repo instance
+     */
+    public static function default(): Repo
+    {
+        return (new Repo)->setDefault();
+    }
+
+    /**
+     * Add predefined validators. THIS METHOD OVERWRITES EXISTING ALIAS SILENTLY.
      *
      * All validators within Validators subdir are registered with their name casted
      * to lowercase, without "Validator" suffix. For example, `$repo->get('int')`
@@ -29,17 +39,20 @@ class Repo implements Compilable
      *
      * @return Repo instance
      */
-    public static function default(): Repo
+    public function setDefault(): self
     {
-        $ret = new Repo();
         $v = ['Array', 'Bool', 'Dict', 'Float', 'Int', 'Numeric', 'String'];
         foreach ($v as $c) {
-            $ret->register(
-                strtolower($c),
-                'Fruit\CheckKit\Validators\\' . $c . 'Validator'
-            );
+            $k = strtolower($c);
+            $cls = 'Fruit\CheckKit\Validators\\' . $c . 'Validator';
+            if (!isset($this->cls2obj[$k])) {
+                $this->cls2obj[$cls] = $cls;
+            }
+
+            $this->alias2cls[$k] = $cls;
         }
-        return $ret;
+
+        return $this;
     }
 
     /**
