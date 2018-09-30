@@ -24,6 +24,14 @@ use Fruit\CheckKit\Exceptions\InvalidElementException;
  * * min_length: integer. minimum length. (inclusive)
  * * max_length: integer. maximum length. (inclusive)
  *
+ * \code{.php}
+ * $repo = new Repo;
+ * $repo->register('int', 'Fruit\CheckKit\Validators\IntValidator');
+ * (new DictValidator)->validate($repo, ['a' => 1], [
+ *     'elements' => [ 'a' => [ 'type' => 'int' ] ],
+ * ]); // null
+ * \endcode
+ *
  * ### Strict mode
  *
  * By default (strict == false), DictValidator does not validate unknown elements.

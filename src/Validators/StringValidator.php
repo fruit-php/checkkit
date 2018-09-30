@@ -21,7 +21,7 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
  * * max_length: int. Maximum length of the string. (counted by mb_strlen)
  *
  * \code{.php}
- * (new StringValidator)->validate('123true', [
+ * (new StringValidator)->validate($repo, '123true', [
  *     'empty' => false, // cannot be an empty string
  *     'regex' => '[0-9]+(true|false)', // matching with regex
  *     'min_length' => 10,

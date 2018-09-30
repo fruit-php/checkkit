@@ -12,7 +12,7 @@ use Fruit\CheckKit\Exceptions\InvalidFormatException;
  *
  * @see AbstractNumberV
  * \code{.php}
- * (new NumericValidator)->validate(1, ['min' => -1.5, 'max' => 3.3]);
+ * (new NumericValidator)->validate($repo, 1, ['min' => -1.5, 'max' => 3.3]);
  * \endcode
  */
 class NumericValidator extends AbstractNumberV
