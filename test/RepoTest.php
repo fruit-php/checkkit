@@ -3,6 +3,7 @@
 namespace FruitTest\CheckKit;
 
 use Fruit\CheckKit\Repo;
+use ReflectionClass;
 
 class RepoTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,5 +52,14 @@ class RepoTest extends \PHPUnit\Framework\TestCase
     public function testInvalidGet()
     {
         (new Repo)->get('testee');
+    }
+
+    public function testCompiledClass()
+    {
+        $repo = Repo::default();
+        $expect = (new ReflectionClass($repo->get('int')))->getName();
+        $code = '$actual = ' . $repo->compile()->render() . ';';
+        eval($code);
+        $this->assertInstanceOf($expect, $actual->get('int'));
     }
 }

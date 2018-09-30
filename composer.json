@@ -17,7 +17,8 @@
   },
   "require": {
     "php": "^7",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "fruit/compilekit": ">=0.1.11"
   },
   "suggest": {
   },

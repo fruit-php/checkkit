@@ -4,16 +4,43 @@ namespace Fruit\CheckKit;
 
 use Fruit\CheckKit\Exceptions\RepoException;
 use ReflectionClass;
+use Fruit\CompileKit\Compilable;
+use Fruit\CompileKit\Renderable;
+use Fruit\CompileKit\AnonymousClass;
+use Fruit\CompileKit\Block;
+use Fruit\CompileKit\Value;
 
 /**
  * Repo is the main API entry of CheckKit.
  *
  * It is designed to support lazy-load without compilation. See Repo::register.
  */
-class Repo
+class Repo implements Compilable
 {
-    private $cls2obj = [];
-    private $alias2cls = [];
+    protected $cls2obj = [];
+    protected $alias2cls = [];
+
+    /**
+     * Create an repo with default validators.
+     *
+     * All validators within Validators subdir are registered with their name casted
+     * to lowercase, without "Validator" suffix. For example, `$repo->get('int')`
+     * returns Validators::IntValidator.
+     *
+     * @return Repo instance
+     */
+    public static function default(): Repo
+    {
+        $ret = new Repo();
+        $v = ['Array', 'Bool', 'Dict', 'Float', 'Int', 'Numeric', 'String'];
+        foreach ($v as $c) {
+            $ret->register(
+                strtolower($c),
+                'Fruit\CheckKit\Validators\\' . $c . 'Validator'
+            );
+        }
+        return $ret;
+    }
 
     /**
      * Let Repo know about an validator.
@@ -81,11 +108,50 @@ class Repo
 
     /**
      * Main API entry.
-     *
-     *
      */
     public function check($val, string $alias, array $rules)
     {
         return $this->get($alias)->validate($this, $val, $rules);
+    }
+
+    /**
+     * Implementing Compilable interface.
+     *
+     * It always return an AnonymousClass, and Repo::register is masked. Calling
+     * register is no-op.
+     *
+     * @see Fruit::CompileKit::Compilable
+     */
+    public function compile(): Renderable
+    {
+        $c2o = [];
+        $a2c = [];
+        foreach ($this->cls2obj as $k => $v) {
+            $c2o[$k] = $k;
+        }
+        foreach ($this->alias2cls as $k => $v) {
+            $a2c[$k] = $v;
+        }
+
+        $body = (new Block)
+            ->append(Value::assign(
+                Value::as('$this->cls2obj'),
+                Value::of($c2o)
+            ))
+            ->append(Value::assign(
+                Value::as('$this->alias2cls'),
+                Value::of($a2c)
+            ));
+        $ret = new AnonymousClass;
+        $ret
+            ->extends('\Fruit\CheckKit\Repo')
+            ->can('__construct')
+            ->append($body);
+        $ret
+            ->can('register')
+            ->rawArg('$a', 'string')
+            ->rawArg('$b', 'string');
+
+        return $ret;
     }
 }
