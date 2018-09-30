@@ -115,6 +115,21 @@ class Repo implements Compilable
     }
 
     /**
+     * Main API entry.
+     *
+     * This method is identical to Repo::check, but throws returned exception.
+     *
+     * @throws Exception
+     */
+    public function mustCheck($val, string $alias, array $rules)
+    {
+        $ret = $this->get($alias)->validate($this, $val, $rules);
+        if ($ret !== null) {
+            throw $ret;
+        }
+    }
+
+    /**
      * Implementing Compilable interface.
      *
      * It always return an AnonymousClass, and Repo::register is masked. Calling
