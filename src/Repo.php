@@ -162,14 +162,14 @@ class Repo implements Compilable
         }
 
         $body = (new Block)
-            ->append(Value::assign(
+            ->assign(
                 Value::as('$this->cls2obj'),
                 Value::of($c2o)
-            ))
-            ->append(Value::assign(
+            )
+            ->assign(
                 Value::as('$this->alias2cls'),
                 Value::of($a2c)
-            ));
+            );
         $ret = new AnonymousClass;
         $ret
             ->extends('\Fruit\CheckKit\Repo')
