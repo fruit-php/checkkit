@@ -23,7 +23,7 @@ class FloatValidator extends AbstractNumberV
     protected function checkType($val): string
     {
         $ret = '';
-        if (!is_float($val)) {
+        if (!is_float($val) and !is_int($val)) {
             $ret = 'float';
         }
 
